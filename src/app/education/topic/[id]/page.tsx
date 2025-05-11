@@ -124,14 +124,28 @@ export default function TopicPage({ params }: { params: Promise<{ id: string }> 
 
         {/* Content Section */}
         {currentSection === 'content' && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 prose dark:prose-invert max-w-none">
-            {topic.content.split('\n\n').map((paragraph: string, index: number) => (
-              <p key={index} className="text-gray-600 dark:text-gray-300 mb-4">
-                {paragraph}
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 prose dark:prose-invert max-w-none">
+    {topic.content.split('\n\n').map((paragraph, index) => {
+      // Split bullet lines inside the paragraph
+      const lines = paragraph.split('\n');
+
+      return (
+        <div key={index} className="mb-4 space-y-2">
+          {lines.map((line, i) =>
+            line.trim().startsWith('•') ? (
+              <p key={i} className="text-gray-700 dark:text-gray-300">
+                {line.trim()}
               </p>
-            ))}
-          </div>
-        )}
+            ) : (
+              <p key={i} className="text-gray-600 font-bold text-center text-2xl dark:text-gray-300">{line.trim()}</p>
+            )
+          )}
+        </div>
+      );
+    })}
+  </div>
+)}
+
 
         {/* Quiz Section */}
         {currentSection === 'quiz' && topic.quiz && (
