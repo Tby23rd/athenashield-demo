@@ -8,7 +8,7 @@ interface Email {
   timestamp: string;
   read: boolean;
   category: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: 'high'|'medium'|'low';
 }
 
 interface EmailListProps {
@@ -17,21 +17,21 @@ interface EmailListProps {
   onEmailClick?: (email: Email) => void;
 }
 
-export default function EmailList({ emails, loading, onEmailClick }: EmailListProps) {
-  const getPriorityStyle = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'bg-red-100 text-red-800';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'low':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+export default function EmailList({emails,loading,onEmailClick}: EmailListProps) {
+  const getPriorityStyle=(priority: string) => {
+    switch(priority) {
+    case 'high':
+      return 'bg-red-100 text-red-800';
+    case 'medium':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'low':
+      return 'bg-green-100 text-green-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
     }
   };
 
-  if (loading) {
+  if(loading) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 text-center">
         <div className="animate-pulse flex flex-col gap-4">
@@ -43,7 +43,7 @@ export default function EmailList({ emails, loading, onEmailClick }: EmailListPr
     );
   }
 
-  if (emails.length === 0) {
+  if(emails.length===0) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 text-center">
         No emails found matching your criteria.
@@ -55,20 +55,19 @@ export default function EmailList({ emails, loading, onEmailClick }: EmailListPr
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <ul className="divide-y divide-gray-200 dark:divide-gray-700">
         {emails.map((email) => (
-          <li 
-            key={email.id} 
+          <li
+            key={email.id}
             className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
-            onClick={() => onEmailClick && onEmailClick(email)}
+            onClick={() => onEmailClick&&onEmailClick(email)}
           >
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${email.read ? 'bg-gray-300' : 'bg-blue-500'}`}></div>
-                <span className="font-semibold">{email.sender}</span>
+                <div className={`w-2 h-2 rounded-full ${email.read? 'bg-gray-300':'bg-blue-500'}`}></div>
+                <span className="font-semibold text-gray-900 dark:text-white">{email.sender}</span>
               </div>
-              <span className="text-sm text-gray-500">
-                {new Date(email.timestamp).toLocaleString()}
-              </span>
+              <span className="text-sm text-gray-500">{new Date(email.timestamp).toLocaleString()}</span>
             </div>
+
             <div className="mt-1">
               <h3 className="font-medium">{email.subject}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-300">{email.preview}</p>

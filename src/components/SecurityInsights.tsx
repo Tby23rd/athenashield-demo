@@ -1,63 +1,63 @@
 'use client';
 
 import {Email} from '@/models/type';
-import { useMemo } from 'react';
+import {useMemo} from 'react';
 
 interface SecurityInsightsProps {
   emails: Email[];
 }
 
-export default function SecurityInsights({ emails }: SecurityInsightsProps) {
-  const insights = useMemo(() => {
-    const totalEmails = emails.length;
-    if (totalEmails === 0) return null;
+export default function SecurityInsights({emails}: SecurityInsightsProps) {
+  const insights=useMemo(() => {
+    const totalEmails=emails.length;
+    if(totalEmails===0) return null;
 
-    let highRiskEmails = 0;
-    let spamEmails = 0;
-    let securityEmails = 0;
-    let unreadEmails = 0;
-    let urgentEmails = 0;
-    let positive = 0, negative = 0, neutral = 0;
-    let phishingSum = 0;
-    let spamSum = 0;
-    let suspiciousLinks = 0;
-    let suspiciousAttachments = 0;
-    const categoryDistribution: Record<string, number> = {};
-    const priorityDistribution: Record<string, number> = {};
+    let highRiskEmails=0;
+    let spamEmails=0;
+    let securityEmails=0;
+    let unreadEmails=0;
+    let urgentEmails=0;
+    let positive=0,negative=0,neutral=0;
+    let phishingSum=0;
+    let spamSum=0;
+    let suspiciousLinks=0;
+    let suspiciousAttachments=0;
+    const categoryDistribution: Record<string,number>={};
+    const priorityDistribution: Record<string,number>={};
 
     emails.forEach(email => {
-      if (!email) return;
-      if (!email.read) unreadEmails++;
-      
+      if(!email) return;
+      if(!email.read) unreadEmails++;
+
       // Category distribution
-      categoryDistribution[email.category] = (categoryDistribution[email.category] || 0) + 1;
-      priorityDistribution[email.priority] = (priorityDistribution[email.priority] || 0) + 1;
-      
-      if (email.category === 'security') securityEmails++;
-      
-      if (email.aiAnalysis) {
-        phishingSum += email.aiAnalysis.phishingProbability || 0;
-        spamSum += email.aiAnalysis.spamProbability || 0;
-        
-        if (email.aiAnalysis.phishingProbability > 0.5) highRiskEmails++;
-        if (email.aiAnalysis.spamProbability > 0.5) spamEmails++;
-        if (email.aiAnalysis.urgency === 'high') urgentEmails++;
-        if (email.aiAnalysis.sentiment === 'positive') positive++;
-        if (email.aiAnalysis.sentiment === 'negative') negative++;
-        if (email.aiAnalysis.sentiment === 'neutral') neutral++;
-        
+      categoryDistribution[email.category]=(categoryDistribution[email.category]||0)+1;
+      priorityDistribution[email.priority]=(priorityDistribution[email.priority]||0)+1;
+
+      if(email.category==='security') securityEmails++;
+
+      if(email.aiAnalysis) {
+        phishingSum+=email.aiAnalysis.phishingProbability||0;
+        spamSum+=email.aiAnalysis.spamProbability||0;
+
+        if(email.aiAnalysis.phishingProbability>0.5) highRiskEmails++;
+        if(email.aiAnalysis.spamProbability>0.5) spamEmails++;
+        if(email.aiAnalysis.urgency==='high') urgentEmails++;
+        if(email.aiAnalysis.sentiment==='positive') positive++;
+        if(email.aiAnalysis.sentiment==='negative') negative++;
+        if(email.aiAnalysis.sentiment==='neutral') neutral++;
+
         // Check for suspicious content
-        if (email.content?.includes('http://') || email.content?.includes('https://')) {
+        if(email.content?.includes('http://')||email.content?.includes('https://')) {
           suspiciousLinks++;
         }
-        if (email.attachments?.length) {
+        if(email.attachments?.length) {
           suspiciousAttachments++;
         }
       }
     });
 
-    const averagePhishingRisk = totalEmails ? phishingSum / totalEmails : 0;
-    const averageSpamRisk = totalEmails ? spamSum / totalEmails : 0;
+    const averagePhishingRisk=totalEmails? phishingSum/totalEmails:0;
+    const averageSpamRisk=totalEmails? spamSum/totalEmails:0;
 
     return {
       totalEmails,
@@ -76,9 +76,9 @@ export default function SecurityInsights({ emails }: SecurityInsightsProps) {
       categoryDistribution,
       priorityDistribution
     };
-  }, [emails]);
+  },[emails]);
 
-  if (!insights) {
+  if(!insights) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold mb-4">Security Insights</h2>
@@ -87,9 +87,9 @@ export default function SecurityInsights({ emails }: SecurityInsightsProps) {
     );
   }
 
-  const getRiskLevelColor = (value: number) => {
-    if (value > 0.7) return 'text-red-600';
-    if (value > 0.4) return 'text-yellow-600';
+  const getRiskLevelColor=(value: number) => {
+    if(value>0.7) return 'text-red-600';
+    if(value>0.4) return 'text-yellow-600';
     return 'text-green-600';
   };
 
@@ -97,24 +97,24 @@ export default function SecurityInsights({ emails }: SecurityInsightsProps) {
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
       <h2 className="text-xl font-semibold mb-4">Security Insights</h2>
       <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
-        Analysis of {emails.length} email{emails.length > 1 ? 's' : ''}
-        {emails.length === 1 && ' (selected)'}
+        Analysis of {emails.length} email{emails.length>1? 's':''}
+        {emails.length===1&&' (selected)'}
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
           <h3 className="font-medium mb-2">Risk Assessment</h3>
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Phishing Risk:</span>
               <span className={getRiskLevelColor(insights.averagePhishingRisk)}>
-                {(insights.averagePhishingRisk * 100).toFixed(1)}%
+                {(insights.averagePhishingRisk*100).toFixed(1)}%
               </span>
             </div>
             <div className="flex justify-between">
               <span>Spam Risk:</span>
               <span className={getRiskLevelColor(insights.averageSpamRisk)}>
-                {(insights.averageSpamRisk * 100).toFixed(1)}%
+                {(insights.averageSpamRisk*100).toFixed(1)}%
               </span>
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function SecurityInsights({ emails }: SecurityInsightsProps) {
 
       <div className="mb-6">
         <h3 className="font-medium mb-2">Threat Indicators</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-red-50 dark:bg-red-900/30 p-3 rounded-lg">
             <div className="text-red-600 dark:text-red-400 font-medium">
               {insights.highRiskEmails}
@@ -168,14 +168,14 @@ export default function SecurityInsights({ emails }: SecurityInsightsProps) {
       <div className="mb-6">
         <h3 className="font-medium mb-2">Category Distribution</h3>
         <div className="space-y-2">
-          {Object.entries(insights.categoryDistribution).map(([category, count]) => (
+          {Object.entries(insights.categoryDistribution).map(([category,count]) => (
             <div key={category} className="flex justify-between items-center">
               <span className="capitalize">{category}</span>
               <div className="flex items-center gap-2">
                 <div className="w-24 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                   <div
                     className="bg-cyan-400 h-2 rounded-full"
-                    style={{ width: `${(count / insights.totalEmails) * 100}%` }}
+                    style={{width: `${(count/insights.totalEmails)*100}%`}}
                   />
                 </div>
                 <span className="text-sm text-gray-500">{count}</span>
@@ -187,24 +187,49 @@ export default function SecurityInsights({ emails }: SecurityInsightsProps) {
 
       <div>
         <h3 className="font-medium mb-2">Sentiment Analysis</h3>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span className="text-green-600">+{insights.positive}</span>
-            <span className="text-gray-600">{insights.neutral}</span>
-            <span className="text-red-600">-{insights.negative}</span>
+
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          {/* Sentiment Counts */}
+          <div className="flex items-center gap-4 text-sm font-medium">
+            <div className="flex items-center gap-1 text-green-600">
+              <span className="w-2 h-2 rounded-full bg-green-600" />
+              Positive: {insights.positive}
+            </div>
+            <div className="flex items-center gap-1 text-gray-600">
+              <span className="w-2 h-2 rounded-full bg-gray-600" />
+              Neutral: {insights.neutral}
+            </div>
+            <div className="flex items-center gap-1 text-red-600">
+              <span className="w-2 h-2 rounded-full bg-red-600" />
+              Negative: {insights.negative}
+            </div>
           </div>
-          <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+
+          {/* Sentiment Distribution Bar */}
+          <div className="w-full sm:w-1/2 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-green-500 via-gray-500 to-red-500 h-2 rounded-full"
+              className="h-full bg-green-500"
+              style={{width: `${(insights.positive/insights.totalEmails)*100}%`}}
+            />
+            <div
+              className="h-full bg-gray-500"
               style={{
-                width: '100%',
-                backgroundSize: `${insights.totalEmails * 100}% 100%`,
-                backgroundPosition: `${(insights.positive / insights.totalEmails) * 100}% 0`
+                width: `${(insights.neutral/insights.totalEmails)*100}%`,
+                marginLeft: `${(insights.positive/insights.totalEmails)*100}%`,
+              }}
+            />
+            <div
+              className="h-full bg-red-500"
+              style={{
+                width: `${(insights.negative/insights.totalEmails)*100}%`,
+                marginLeft: `${((insights.positive+insights.neutral)/insights.totalEmails)*100}%`,
               }}
             />
           </div>
         </div>
       </div>
+
+
     </div>
   );
 }
