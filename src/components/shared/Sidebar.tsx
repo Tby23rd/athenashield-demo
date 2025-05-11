@@ -69,7 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, defaultOpen = false 
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b">
           <Image
-            src="/logo-t.png"
+            src="/logo.png"
             alt="Logo"
             width={400}
             height={200}
